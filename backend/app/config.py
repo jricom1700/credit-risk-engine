@@ -37,7 +37,11 @@ class Settings(BaseModel):
     DEFAULT_FUNDING_COST: float = 0.11   # 11% costo de fondeo anual (TIIE + spread)
     DEFAULT_CUTOFF_SCORE: int = 560      # Corte base para simulación
 
-    # CORS
-    CORS_ORIGINS: List[str] = ["*"]
+    # CORS: admite orígenes separados por comas o wildcard '*' para consumo público
+    CORS_ORIGINS: List[str] = [
+        origin.strip()
+        for origin in os.getenv("ALLOWED_ORIGINS", "*").split(",")
+        if origin.strip()
+    ]
 
 settings = Settings()

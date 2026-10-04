@@ -3,7 +3,7 @@ import { Navbar } from './components/Navbar'
 import { UnderwritingView } from './components/UnderwritingView'
 import { PortfolioStrategyView } from './components/PortfolioStrategyView'
 import { NotebooksPage } from './pages/NotebooksPage'
-import { checkHealth, getModelMetadata } from './services/api'
+import { checkHealth, getModelMetadata, API_BASE_URL } from './services/api'
 import { AlertCircle } from 'lucide-react'
 
 export function App() {
@@ -83,7 +83,7 @@ export function App() {
         <div className="bg-rose-500/10 border-b border-rose-500/30 px-4 py-2.5 text-center text-xs text-rose-300 flex items-center justify-center gap-2">
           <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
           <span>
-            No se detectó el backend de FastAPI en <code>http://localhost:8000</code>. Inicia el servidor con:{' '}
+            No se detectó el backend de FastAPI en <code className="bg-rose-950/40 px-1.5 py-0.5 rounded font-mono">{API_BASE_URL}</code>. Verifica el servicio o inicia localmente con:{' '}
             <code className="bg-rose-950/60 px-2 py-0.5 rounded text-rose-200 font-mono text-[11px]">
               python -m uvicorn app.main:app --port 8000
             </code>

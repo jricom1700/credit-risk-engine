@@ -62,11 +62,14 @@ app = FastAPI(
     redoc_url="/redoc"
 )
 
-# Configuración de CORS para permitir la conexión desde el frontend React
+# Configuración de CORS para permitir la conexión desde el frontend (Local, Vercel o dominios personalizados)
+allow_all_origins = "*" in settings.CORS_ORIGINS
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,
-    allow_credentials=True,
+    allow_origins=["*"] if allow_all_origins else settings.CORS_ORIGINS,
+    allow_origin_regex=r"https://.*\.vercel\.app" if not allow_all_origins else None,
+    allow_credentials=False if allow_all_origins else True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
