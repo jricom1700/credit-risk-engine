@@ -6,10 +6,6 @@ __pycache__/
 *$py.class
 .ipynb_checkpoints/
 
-# Modelos temporales / binarios grandes si aplican
-*.joblib
-*.pkl
-
 # Node / Frontend
 node_modules/
 dist/
