@@ -216,11 +216,11 @@ export function ScoreGauge({ score = 300, cutoff = 560, onCutoffChange }) {
 
       {/* Lectura Numérica Central Reactiva */}
       <div className="text-center -mt-4 w-full">
-        <div className={`text-4xl sm:text-5xl font-black tracking-tight ${getScoreColor()} font-mono transition-colors duration-300`}>
+        <div className={`text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight ${getScoreColor()} font-mono transition-colors duration-300`}>
           {score}
-          <span className="text-sm font-sans font-medium text-slate-400 ml-1">pts</span>
+          <span className="text-xs sm:text-sm font-sans font-medium text-slate-400 ml-1">pts</span>
         </div>
-        <div className="text-xs font-semibold text-slate-300 mt-1 transition-all duration-300">
+        <div className="text-[11px] sm:text-xs font-semibold text-slate-300 mt-0.5 sm:mt-1 transition-all duration-300">
           {getScoreLabel()}
         </div>
       </div>

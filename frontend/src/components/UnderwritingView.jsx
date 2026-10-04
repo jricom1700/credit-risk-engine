@@ -363,14 +363,14 @@ export function UnderwritingView() {
       {/* 1. SECCIÓN DE FORMULARIO PLEGABLE (Acordeón Liquid Glass) */}
       <div className="liquid-glass rounded-2xl overflow-hidden transition-all duration-300 border border-white/10 shadow-xl">
         {/* Cabecera del Acordeón con Botón para Expandir/Modificar */}
-        <div className="p-4 sm:p-5 flex items-center justify-between border-b border-white/10 bg-white/[0.02]">
+        <div className="p-3.5 sm:p-5 flex items-center justify-between border-b border-white/10 bg-white/[0.02]">
           <div>
-            <h2 className="text-base font-bold text-white flex items-center gap-2">
+            <h2 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
               <FileText className="w-4 h-4 text-emerald-400" />
               Datos del Solicitante de Crédito
             </h2>
             {!isFormExpanded && result && (
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-[11px] sm:text-xs text-slate-400 mt-0.5">
                 {formData.person_age} años · Ingreso: {formatMXN(numericMonthly)}/mes · Monto: {formatMXN(numericLoanAmnt)} · DTI: {formatPercent(currentDti)}
               </p>
             )}
@@ -380,10 +380,11 @@ export function UnderwritingView() {
             <button
               type="button"
               onClick={() => setIsFormExpanded(!isFormExpanded)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-200 liquid-glass-interactive cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-200 liquid-glass-interactive cursor-pointer"
             >
               <Edit3 className="w-3.5 h-3.5" />
-              <span>{isFormExpanded ? 'Colapsar Formulario' : 'Modificar Datos / Ver Formulario'}</span>
+              <span className="hidden xs:inline sm:inline">{isFormExpanded ? 'Colapsar Formulario' : 'Modificar Datos'}</span>
+              <span className="xs:hidden sm:hidden">{isFormExpanded ? 'Colapsar' : 'Modificar'}</span>
               {isFormExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
             </button>
           )}
@@ -391,8 +392,8 @@ export function UnderwritingView() {
 
         {/* Cuerpo del Formulario Plegable */}
         {isFormExpanded && (
-          <form onSubmit={handleSubmit} className="p-5 sm:p-6 space-y-5 animate-in fade-in duration-200">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <form onSubmit={handleSubmit} className="p-3.5 sm:p-6 space-y-4 sm:space-y-5 animate-in fade-in duration-200">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {/* Fila 1: Edad y Tipo de Vivienda (Etiquetas Limpias) */}
               <div>
                 <label className="block text-xs font-medium text-slate-300 mb-1">
@@ -654,37 +655,35 @@ export function UnderwritingView() {
       {/* 2. SECCIÓN DE RESULTADO: CONTENEDOR UNIFICADO INTEGRAL */}
       {result && currentVerdict && (
         <div className="space-y-6 animate-in zoom-in-95 duration-300">
-          {/* CONTENEDOR PRINCIPAL INTEGRADO LIQUID GLASS:
-              El contenedor se mantiene en elegante Liquid Glass neutro.
-              El color se enfoca exclusivamente en el nivel de riesgo CNBV, dictamen y score. */}
-          <div className="p-6 sm:p-7 rounded-2xl liquid-glass border border-white/12 shadow-2xl relative overflow-hidden transition-all space-y-6 text-white">
+          {/* CONTENEDOR PRINCIPAL INTEGRADO LIQUID GLASS */}
+          <div className="p-3.5 sm:p-6 lg:p-7 rounded-2xl liquid-glass border border-white/12 shadow-2xl relative overflow-hidden transition-all space-y-4 sm:space-y-6 text-white">
             
             {/* 1. SECCIÓN SUPERIOR: DICTAMEN FINAL Y NIVEL DE RIESGO CNBV A SU LADO */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
               {/* Lado izquierdo: Dictamen Final */}
-              <div className="flex items-center space-x-4">
-                <div className={`p-3.5 rounded-2xl border shrink-0 shadow-lg ${currentVerdict.badgeClass}`}>
-                  <currentVerdict.icon className="w-9 h-9" />
+              <div className="flex items-center space-x-3 sm:space-x-4">
+                <div className={`p-2.5 sm:p-3.5 rounded-2xl border shrink-0 shadow-lg ${currentVerdict.badgeClass}`}>
+                  <currentVerdict.icon className="w-7 h-7 sm:w-9 sm:h-9" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-bold tracking-widest uppercase text-slate-300 block">
+                  <span className="text-[10px] sm:text-[11px] font-bold tracking-widest uppercase text-slate-300 block">
                     Dictamen Final de Crédito
                   </span>
-                  <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white mt-0.5">
+                  <h1 className="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-white mt-0.5">
                     {currentVerdict.title}
                   </h1>
                   {currentVerdict.description && (
-                    <p className="text-xs text-slate-200/90 mt-1 max-w-2xl leading-relaxed">
+                    <p className="text-[11px] sm:text-xs text-slate-200/90 mt-1 max-w-2xl leading-relaxed">
                       {currentVerdict.description}
                     </p>
                   )}
                 </div>
               </div>
 
-              {/* Lado derecho: KPI de Nivel de Riesgo Regulatorio CNBV (iluminado según su nivel de riesgo y más grande) */}
+              {/* Lado derecho: KPI de Nivel de Riesgo Regulatorio CNBV */}
               <div
                 onClick={() => setSelectedKpi('cnbv_rating')}
-                className={`p-4 sm:px-6 sm:py-4 rounded-2xl border backdrop-blur-md cursor-pointer transition-all flex items-center justify-between sm:justify-start gap-5 shrink-0 shadow-xl ${
+                className={`p-3 sm:px-5 sm:py-3.5 rounded-2xl border backdrop-blur-md cursor-pointer transition-all flex items-center justify-between sm:justify-start gap-3 sm:gap-5 shrink-0 shadow-xl ${
                   result.cnbv_rating.startsWith('A')
                     ? 'bg-emerald-950/40 border-emerald-500/50 shadow-emerald-500/10 hover:bg-emerald-950/60'
                     : result.cnbv_rating.startsWith('B')
@@ -696,14 +695,14 @@ export function UnderwritingView() {
                 title="Haz clic para ver qué significa el Grado CNBV y tabla de equivalencias"
               >
                 <div>
-                  <span className="text-[11px] font-bold text-slate-300 uppercase tracking-wider block">
+                  <span className="text-[10px] sm:text-[11px] font-bold text-slate-300 uppercase tracking-wider block">
                     Nivel de Riesgo CNBV
                   </span>
-                  <div className="flex items-center gap-2.5 mt-1">
-                    <span className={`px-3 py-1 rounded-xl text-lg sm:text-xl font-black border font-mono tracking-wide ${getCNBVBadgeColor(result.cnbv_rating)}`}>
+                  <div className="flex items-center gap-2 mt-0.5 sm:mt-1">
+                    <span className={`px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-xl text-base sm:text-xl font-black border font-mono tracking-wide ${getCNBVBadgeColor(result.cnbv_rating)}`}>
                       {result.cnbv_rating}
                     </span>
-                    <span className="text-sm sm:text-base font-bold text-white">
+                    <span className="text-xs sm:text-base font-bold text-white">
                       {result.cnbv_description || 'Riesgo Evaluado'}
                     </span>
                   </div>
@@ -715,7 +714,7 @@ export function UnderwritingView() {
                     e.stopPropagation()
                     setSelectedKpi('cnbv_rating')
                   }}
-                  className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/10 text-white border border-white/20 hover:bg-white/20 transition cursor-pointer"
+                  className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl text-[11px] sm:text-xs font-semibold bg-white/10 text-white border border-white/20 hover:bg-white/20 transition cursor-pointer"
                 >
                   ¿Qué significa?
                 </button>
@@ -723,34 +722,34 @@ export function UnderwritingView() {
             </div>
 
             {/* 2. KPIS REGULATORIOS Y FINANCIEROS (CON CONTENEDOR DE MONTO A PRESTAR) */}
-            <div className="pt-4 border-t border-white/10">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+            <div className="pt-3 sm:pt-4 border-t border-white/10">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 text-xs">
                 {/* KPI 0: Monto a Prestar (Crédito Solicitado) */}
                 <div
                   onClick={() => setSelectedKpi('loan_amount')}
-                  className="p-4 sm:p-5 rounded-2xl liquid-glass-subtle border border-white/10 flex flex-col justify-between cursor-pointer transition-all hover:bg-white/[0.08] hover:border-white/25 hover:scale-[1.01] group min-h-[140px]"
+                  className="p-3.5 sm:p-5 rounded-2xl liquid-glass-subtle border border-white/10 flex flex-col justify-between cursor-pointer transition-all hover:bg-white/[0.08] hover:border-white/25 hover:scale-[1.01] group min-h-[125px] sm:min-h-[140px]"
                   title="Haz clic para ver explicación del Monto a Prestar y Capacidad de Pago"
                 >
                   <div>
-                    <span className="text-[11px] font-semibold text-slate-300 uppercase tracking-wider block">
+                    <span className="text-[10px] sm:text-[11px] font-semibold text-slate-300 uppercase tracking-wider block">
                       Monto a Prestar (Solicitado)
                     </span>
-                    <div className="my-2">
+                    <div className="my-1.5 sm:my-2">
                       <div className="flex items-baseline flex-wrap gap-x-1.5">
-                        <span className="text-2xl sm:text-3xl lg:text-4xl font-black text-emerald-400 font-mono tracking-tight whitespace-nowrap">
+                        <span className="text-xl sm:text-2xl lg:text-3xl font-black text-emerald-400 font-mono tracking-tight whitespace-nowrap">
                           {formatMXNValue(numericLoanAmnt)}
                         </span>
-                        <span className="text-xs sm:text-sm font-semibold text-slate-400 uppercase tracking-wider">
+                        <span className="text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider">
                           MXN
                         </span>
                       </div>
-                      <span className="text-xs font-medium text-slate-300 block mt-1">
+                      <span className="text-[11px] sm:text-xs font-medium text-slate-300 block mt-1">
                         Tasa: {formData.loan_int_rate || 12.5}% · DTI: {formatPercent(currentDti)}
                       </span>
                     </div>
                   </div>
-                  <div className="flex justify-end pt-2 border-t border-white/5">
-                    <span className="text-[11px] text-slate-400 group-hover:text-emerald-300 font-medium transition-colors">
+                  <div className="flex justify-end pt-1.5 sm:pt-2 border-t border-white/5">
+                    <span className="text-[10px] sm:text-[11px] text-slate-400 group-hover:text-emerald-300 font-medium transition-colors">
                       Ver detalle ↗
                     </span>
                   </div>
@@ -759,24 +758,24 @@ export function UnderwritingView() {
                 {/* KPI 1: Probabilidad de Incumplimiento (PD) */}
                 <div
                   onClick={() => setSelectedKpi('pd')}
-                  className="p-4 sm:p-5 rounded-2xl liquid-glass-subtle border border-white/10 flex flex-col justify-between cursor-pointer transition-all hover:bg-white/[0.08] hover:border-white/25 hover:scale-[1.01] group min-h-[140px]"
+                  className="p-3.5 sm:p-5 rounded-2xl liquid-glass-subtle border border-white/10 flex flex-col justify-between cursor-pointer transition-all hover:bg-white/[0.08] hover:border-white/25 hover:scale-[1.01] group min-h-[125px] sm:min-h-[140px]"
                   title="Haz clic para ver explicación de la Probabilidad de Incumplimiento"
                 >
                   <div>
-                    <span className="text-[11px] font-semibold text-slate-300 uppercase tracking-wider block">
+                    <span className="text-[10px] sm:text-[11px] font-semibold text-slate-300 uppercase tracking-wider block">
                       Probabilidad de Default (PD)
                     </span>
-                    <div className="my-2">
-                      <span className="text-2xl sm:text-3xl lg:text-4xl font-black text-sky-300 font-mono block tracking-tight">
+                    <div className="my-1.5 sm:my-2">
+                      <span className="text-xl sm:text-2xl lg:text-3xl font-black text-sky-300 font-mono block tracking-tight">
                         {formatPercent(result.probability_of_default * 100, 2)}
                       </span>
-                      <span className="text-xs font-medium text-slate-300 block mt-1">
+                      <span className="text-[11px] sm:text-xs font-medium text-slate-300 block mt-1">
                         Mora grave a 12 meses
                       </span>
                     </div>
                   </div>
-                  <div className="flex justify-end pt-2 border-t border-white/5">
-                    <span className="text-[11px] text-slate-400 group-hover:text-sky-300 font-medium transition-colors">
+                  <div className="flex justify-end pt-1.5 sm:pt-2 border-t border-white/5">
+                    <span className="text-[10px] sm:text-[11px] text-slate-400 group-hover:text-sky-300 font-medium transition-colors">
                       Ver detalle ↗
                     </span>
                   </div>
@@ -785,24 +784,24 @@ export function UnderwritingView() {
                 {/* KPI 2: Reserva Preventiva Obligatoria */}
                 <div
                   onClick={() => setSelectedKpi('reserve')}
-                  className="p-4 sm:p-5 rounded-2xl liquid-glass-subtle border border-white/10 flex flex-col justify-between cursor-pointer transition-all hover:bg-white/[0.08] hover:border-white/25 hover:scale-[1.01] group min-h-[140px]"
+                  className="p-3.5 sm:p-5 rounded-2xl liquid-glass-subtle border border-white/10 flex flex-col justify-between cursor-pointer transition-all hover:bg-white/[0.08] hover:border-white/25 hover:scale-[1.01] group min-h-[125px] sm:min-h-[140px]"
                   title="Haz clic para ver explicación de la Reserva Preventiva"
                 >
                   <div>
-                    <span className="text-[11px] font-semibold text-slate-300 uppercase tracking-wider block">
+                    <span className="text-[10px] sm:text-[11px] font-semibold text-slate-300 uppercase tracking-wider block">
                       Reserva Preventiva CUB
                     </span>
-                    <div className="my-2">
-                      <span className="text-2xl sm:text-3xl lg:text-4xl font-black text-amber-300 font-mono block tracking-tight">
+                    <div className="my-1.5 sm:my-2">
+                      <span className="text-xl sm:text-2xl lg:text-3xl font-black text-amber-300 font-mono block tracking-tight">
                         {formatPercent(result.cnbv_minimum_reserve_pct)}
                       </span>
-                      <span className="text-xs font-medium text-slate-300 block mt-1">
+                      <span className="text-[11px] sm:text-xs font-medium text-slate-300 block mt-1">
                         Provisión contable requerida
                       </span>
                     </div>
                   </div>
-                  <div className="flex justify-end pt-2 border-t border-white/5">
-                    <span className="text-[11px] text-slate-400 group-hover:text-amber-300 font-medium transition-colors">
+                  <div className="flex justify-end pt-1.5 sm:pt-2 border-t border-white/5">
+                    <span className="text-[10px] sm:text-[11px] text-slate-400 group-hover:text-amber-300 font-medium transition-colors">
                       Ver detalle ↗
                     </span>
                   </div>
@@ -811,29 +810,29 @@ export function UnderwritingView() {
                 {/* KPI 3: Pérdida Esperada (EL) */}
                 <div
                   onClick={() => setSelectedKpi('el')}
-                  className="p-4 sm:p-5 rounded-2xl liquid-glass-subtle border border-white/10 flex flex-col justify-between cursor-pointer transition-all hover:bg-white/[0.08] hover:border-white/25 hover:scale-[1.01] group min-h-[140px]"
+                  className="p-3.5 sm:p-5 rounded-2xl liquid-glass-subtle border border-white/10 flex flex-col justify-between cursor-pointer transition-all hover:bg-white/[0.08] hover:border-white/25 hover:scale-[1.01] group min-h-[125px] sm:min-h-[140px]"
                   title="Haz clic para ver explicación de la Pérdida Esperada"
                 >
                   <div>
-                    <span className="text-[11px] font-semibold text-slate-300 uppercase tracking-wider block">
+                    <span className="text-[10px] sm:text-[11px] font-semibold text-slate-300 uppercase tracking-wider block">
                       Pérdida Esperada (EL)
                     </span>
-                    <div className="my-2">
+                    <div className="my-1.5 sm:my-2">
                       <div className="flex items-baseline flex-wrap gap-x-1.5">
-                        <span className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-100 font-mono tracking-tight whitespace-nowrap">
+                        <span className="text-xl sm:text-2xl lg:text-3xl font-black text-slate-100 font-mono tracking-tight whitespace-nowrap">
                           {formatMXNValue(result.expected_loss_mxn)}
                         </span>
-                        <span className="text-xs sm:text-sm font-semibold text-slate-400 uppercase tracking-wider">
+                        <span className="text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider">
                           MXN
                         </span>
                       </div>
-                      <span className="text-xs font-medium text-slate-300 block mt-1">
+                      <span className="text-[11px] sm:text-xs font-medium text-slate-300 block mt-1">
                         Costo de riesgo proyectado
                       </span>
                     </div>
                   </div>
-                  <div className="flex justify-end pt-2 border-t border-white/5">
-                    <span className="text-[11px] text-slate-400 group-hover:text-slate-200 font-medium transition-colors">
+                  <div className="flex justify-end pt-1.5 sm:pt-2 border-t border-white/5">
+                    <span className="text-[10px] sm:text-[11px] text-slate-400 group-hover:text-slate-200 font-medium transition-colors">
                       Ver detalle ↗
                     </span>
                   </div>
@@ -842,11 +841,11 @@ export function UnderwritingView() {
             </div>
 
             {/* 3. SECCIÓN DE SCORING Y DIAGNÓSTICO (50% / 50% MITAD Y MITAD) */}
-            <div className="pt-5 border-t border-white/10">
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+            <div className="pt-4 sm:pt-5 border-t border-white/10">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6">
                 
                 {/* Columna Izquierda: Velocímetro Semicircular + Slider de Corte (6 columnas - 50%) */}
-                <div className="md:col-span-6 liquid-glass-subtle border border-white/10 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
+                <div className="md:col-span-6 liquid-glass-subtle border border-white/10 rounded-2xl p-3.5 sm:p-6 shadow-xl flex flex-col justify-between">
                   <div>
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-xs font-semibold uppercase tracking-wider text-slate-300 block">
@@ -874,7 +873,7 @@ export function UnderwritingView() {
                 </div>
 
                 {/* Columna Derecha: Diagnóstico y Factores Clave (6 columnas - 50%) */}
-                <div className="md:col-span-6 liquid-glass-subtle border border-white/10 rounded-2xl p-6 shadow-xl flex flex-col justify-between space-y-4">
+                <div className="md:col-span-6 liquid-glass-subtle border border-white/10 rounded-2xl p-3.5 sm:p-6 shadow-xl flex flex-col justify-between space-y-4">
                   <div>
                     <span className="text-xs font-semibold uppercase tracking-wider text-slate-300 block mb-3">
                       Diagnóstico y Factores Clave del Solicitante
@@ -1005,12 +1004,12 @@ export function UnderwritingView() {
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header de la ventana con título, indicador y única 'X' para cerrar en esquina superior derecha */}
-              <div className="sticky top-0 liquid-glass-subtle border-b border-white/10 p-5 flex items-center justify-between z-10">
-                <div className="flex items-center gap-3 flex-wrap pr-4">
-                  <span className={`px-2.5 py-0.5 rounded-md text-xs font-bold border ${kpi.badgeColor}`}>
+              <div className="sticky top-0 liquid-glass-subtle border-b border-white/10 p-3.5 sm:p-5 flex items-center justify-between z-10">
+                <div className="flex items-center gap-2 sm:gap-3 flex-wrap pr-2 sm:pr-4">
+                  <span className={`px-2 py-0.5 rounded-md text-[11px] sm:text-xs font-bold border ${kpi.badgeColor}`}>
                     {kpi.badge}
                   </span>
-                  <h3 className="text-base sm:text-lg font-bold text-white">
+                  <h3 className="text-sm sm:text-lg font-bold text-white">
                     {kpi.title}
                   </h3>
                   {kpi.officialUrl && (
@@ -1018,7 +1017,7 @@ export function UnderwritingView() {
                       href={kpi.officialUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs text-sky-400 hover:text-sky-300 underline font-medium inline-flex items-center gap-1"
+                      className="text-[11px] sm:text-xs text-sky-400 hover:text-sky-300 underline font-medium inline-flex items-center gap-1"
                       title="Consultar portal oficial de la CNBV"
                     >
                       <span>Normativa Oficial CNBV</span>
@@ -1031,18 +1030,18 @@ export function UnderwritingView() {
                 <button
                   type="button"
                   onClick={() => setSelectedKpi(null)}
-                  className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition cursor-pointer shrink-0"
+                  className="p-1.5 sm:p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition cursor-pointer shrink-0"
                   title="Cerrar ventana"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
               </div>
 
               {/* Cuerpo de la ventana flotante */}
-              <div className="p-6 space-y-5 text-sm text-slate-300">
+              <div className="p-3.5 sm:p-6 space-y-4 sm:space-y-5 text-xs sm:text-sm text-slate-300">
                 {/* Concepto / Qué significa */}
                 <div className="space-y-1.5">
-                  <span className="text-xs font-bold text-sky-400 uppercase tracking-wider block">
+                  <span className="text-[11px] sm:text-xs font-bold text-sky-400 uppercase tracking-wider block">
                     ¿Qué significa este indicador?
                   </span>
                   <p className="text-sm text-slate-200 leading-relaxed">

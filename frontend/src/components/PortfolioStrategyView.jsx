@@ -402,37 +402,37 @@ export function PortfolioStrategyView() {
   }, [simulation, reservesCapitalCost, netFinancialMarginRAROC])
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-300">
+    <div className="space-y-6 sm:space-y-8 animate-in fade-in duration-300">
       {/* 1. Panel Unificado: Simulador de Portafolio, Estrategia, Parámetros Fijos y Acelerómetro de Corte */}
-      <div className="liquid-glass p-5 sm:p-6 rounded-2xl border border-white/10 shadow-xl space-y-4">
+      <div className="liquid-glass p-3.5 sm:p-6 rounded-2xl border border-white/10 shadow-xl space-y-3 sm:space-y-4">
         {/* Cabecera: Título, Resumen Compacto cuando está plegado, Glosario y Botón Plegar/Desplegar */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
           <div>
-            <h2 className="text-xl font-bold text-white flex items-center gap-2">
-              <Sliders className="w-5 h-5 text-emerald-400" />
+            <h2 className="text-base sm:text-xl font-bold text-white flex items-center gap-2">
+              <Sliders className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400 shrink-0" />
               <span>Simulador de Portafolio y Estrategia de Riesgo</span>
               {loading && <Loader2 className="w-4 h-4 text-emerald-400 animate-spin" />}
             </h2>
-            <p className="text-xs text-slate-400 mt-1 max-w-2xl">
+            <p className="text-[11px] sm:text-xs text-slate-400 mt-1 max-w-2xl">
               Simulación interactiva sobre la cartera de prueba (9,773 contratos). Ajusta las variables de apetito al riesgo.
             </p>
 
             {/* Resumen Compacto visible cuando la sección está PLEGADA para mantener contexto sin robar espacio */}
             {isControlsCollapsed && (
-              <div className="flex flex-wrap items-center gap-2 mt-2.5 pt-2 border-t border-white/5 animate-in fade-in duration-200">
-                <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-                  Configuración Activa:
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mt-2 pt-2 border-t border-white/5 animate-in fade-in duration-200">
+                <span className="text-[10px] sm:text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                  Configuración:
                 </span>
-                <span className="text-xs font-bold font-mono text-white bg-slate-800/80 border border-white/10 px-2 py-0.5 rounded-md">
+                <span className="text-[11px] sm:text-xs font-bold font-mono text-white bg-slate-800/80 border border-white/10 px-2 py-0.5 rounded-md">
                   {STRATEGY_PRESETS[currentPresetKey]?.name || 'Personalizada'}
                 </span>
-                <span className="text-xs font-bold font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded-md">
+                <span className="text-[11px] sm:text-xs font-bold font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded-md">
                   Corte: {params.cutoff_score} pts
                 </span>
-                <span className="text-xs font-bold font-mono text-cyan-400 bg-cyan-950/60 border border-cyan-500/30 px-2 py-0.5 rounded-md">
+                <span className="text-[11px] sm:text-xs font-bold font-mono text-cyan-400 bg-cyan-950/60 border border-cyan-500/30 px-2 py-0.5 rounded-md">
                   Tasa: {formatPercent(params.interest_rate)}
                 </span>
-                <span className="text-xs font-semibold text-slate-400 bg-slate-900/50 border border-white/5 px-2 py-0.5 rounded-md hidden sm:inline-block">
+                <span className="text-[11px] sm:text-xs font-semibold text-slate-400 bg-slate-900/50 border border-white/5 px-2 py-0.5 rounded-md hidden sm:inline-block">
                   Fondeo 11% | LGD 45%
                 </span>
               </div>
@@ -440,7 +440,7 @@ export function PortfolioStrategyView() {
           </div>
 
           {/* Acciones Superiores: Botón Glosario y Botón Plegar / Desplegar */}
-          <div className="flex items-center gap-2.5 self-start md:self-auto shrink-0">
+          <div className="flex items-center gap-2 self-start md:self-auto shrink-0">
             {/* Botón Glosario */}
             <button
               type="button"
@@ -646,14 +646,14 @@ export function PortfolioStrategyView() {
 
       {/* 3. Tarjetas KPI de Resultados Liquid Glass Reacomodadas (2 filas para evitar encimamiento con números grandes) */}
       {simulation && (
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {/* Fila 1: Indicadores Financieros Principales de Capital y Margen (2 columnas amplias) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
             {/* Tarjeta 1: Monto Total Prestado (Cartera Colocada) */}
-            <div className="liquid-glass-subtle p-5 sm:p-6 rounded-2xl border border-white/10 shadow-lg hover:border-white/20 transition flex flex-col justify-between min-h-[160px]">
+            <div className="liquid-glass-subtle p-3.5 sm:p-5 lg:p-6 rounded-2xl border border-white/10 shadow-lg hover:border-white/20 transition flex flex-col justify-between min-h-[145px] sm:min-h-[160px]">
               <div>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">
+                  <span className="text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider block">
                     Monto Total Prestado (Cartera Colocada)
                   </span>
                   <button
@@ -662,24 +662,24 @@ export function PortfolioStrategyView() {
                     className="text-slate-400 hover:text-white transition cursor-pointer"
                     title="Ver explicación del Monto Total Prestado"
                   >
-                    <HelpCircle className="w-4 h-4" />
+                    <HelpCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   </button>
                 </div>
-                <div className="my-2.5">
-                  <div className="flex items-baseline flex-wrap gap-x-2">
-                    <span className="text-2xl sm:text-3xl lg:text-4xl font-black text-emerald-400 font-mono tracking-tight whitespace-nowrap">
+                <div className="my-2 sm:my-2.5">
+                  <div className="flex items-baseline flex-wrap gap-x-1.5 sm:gap-x-2">
+                    <span className="text-xl sm:text-2xl lg:text-3xl font-black text-emerald-400 font-mono tracking-tight whitespace-nowrap">
                       {formatMXNValue(simulation.approved_volume_mxn)}
                     </span>
-                    <span className="text-xs sm:text-sm font-semibold text-slate-400 uppercase tracking-wider">
+                    <span className="text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider">
                       MXN
                     </span>
                   </div>
-                  <span className="text-xs text-slate-300 font-medium block mt-1.5">
+                  <span className="text-[11px] sm:text-xs text-slate-300 font-medium block mt-1">
                     Capital dispersado en {simulation.approved_contracts.toLocaleString()} créditos autorizados
                   </span>
                 </div>
               </div>
-              <div className="mt-3 text-xs text-slate-400 pt-2.5 border-t border-white/5 flex items-center justify-between">
+              <div className="mt-2.5 sm:mt-3 text-[11px] sm:text-xs text-slate-400 pt-2 border-t border-white/5 flex items-center justify-between">
                 <span>Tasa de Aprobación de Cartera:</span>
                 <strong className="text-slate-200 font-mono text-xs font-semibold">{formatPercent(simulation.approval_rate_pct)}</strong>
               </div>
@@ -687,7 +687,7 @@ export function PortfolioStrategyView() {
 
             {/* Tarjeta 2: Margen Financiero Neto (Con Semáforo de Viabilidad CNBV y RAROC) */}
             <div
-              className={`p-5 sm:p-6 rounded-2xl border shadow-lg transition flex flex-col justify-between min-h-[160px] ${
+              className={`p-3.5 sm:p-5 lg:p-6 rounded-2xl border shadow-lg transition flex flex-col justify-between min-h-[145px] sm:min-h-[160px] ${
                 viabilityStatus === 'critical'
                   ? 'liquid-glass border-rose-500/80 bg-rose-950/25 shadow-rose-950/50 ring-1 ring-rose-500/50'
                   : viabilityStatus === 'moderate'
@@ -697,12 +697,12 @@ export function PortfolioStrategyView() {
             >
               <div>
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">
+                  <div className="flex items-center gap-1.5 sm:gap-2">
+                    <span className="text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider block">
                       Margen Financiero Neto (RAROC)
                     </span>
                     <span
-                      className={`px-2 py-0.5 rounded text-[10px] font-bold border uppercase ${
+                      className={`px-1.5 sm:px-2 py-0.5 rounded text-[9px] sm:text-[10px] font-bold border uppercase ${
                         viabilityStatus === 'critical'
                           ? 'bg-rose-500/20 text-rose-300 border-rose-500/40'
                           : viabilityStatus === 'moderate'
@@ -720,14 +720,14 @@ export function PortfolioStrategyView() {
                     title="Ver fórmula y desglose metodológico del Margen Neto RAROC"
                     aria-label="Abrir glosario del Margen Neto"
                   >
-                    <HelpCircle className="w-4 h-4 text-emerald-400" />
+                    <HelpCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" />
                   </button>
                 </div>
 
-                <div className="my-2.5">
-                  <div className="flex items-baseline flex-wrap gap-x-2">
+                <div className="my-2 sm:my-2.5">
+                  <div className="flex items-baseline flex-wrap gap-x-1.5 sm:gap-x-2">
                     <span
-                      className={`text-2xl sm:text-3xl lg:text-4xl font-black font-mono tracking-tight whitespace-nowrap ${
+                      className={`text-xl sm:text-2xl lg:text-3xl font-black font-mono tracking-tight whitespace-nowrap ${
                         viabilityStatus === 'critical'
                           ? 'text-rose-400'
                           : viabilityStatus === 'moderate'
@@ -737,11 +737,11 @@ export function PortfolioStrategyView() {
                     >
                       {formatMXNValue(netFinancialMarginRAROC)}
                     </span>
-                    <span className="text-xs sm:text-sm font-semibold text-slate-400 uppercase tracking-wider">
+                    <span className="text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider">
                       MXN
                     </span>
                     <span
-                      className={`text-xs font-semibold font-mono flex items-center ml-2 ${
+                      className={`text-[11px] sm:text-xs font-semibold font-mono flex items-center ml-1.5 sm:ml-2 ${
                         netFinancialMarginRAROC <= 0 ? 'text-rose-400' : 'text-emerald-300'
                       }`}
                       title="Retorno sobre Cartera Ajustado por Riesgo (ROC / Yield Neto)"
@@ -759,41 +759,41 @@ export function PortfolioStrategyView() {
 
               {/* Banners del Semáforo de Viabilidad Regulatoria CNBV */}
               {viabilityStatus === 'critical' ? (
-                <div className="mt-3 pt-2.5 border-t border-rose-500/40 space-y-1">
+                <div className="mt-2.5 sm:mt-3 pt-2 border-t border-rose-500/40 space-y-1">
                   <div className="flex items-center gap-1.5 text-xs font-bold text-rose-400">
-                    <AlertTriangle className="w-4 h-4 shrink-0 text-rose-400 animate-pulse" />
+                    <AlertTriangle className="w-3.5 h-3.5 shrink-0 text-rose-400 animate-pulse" />
                     <span>Estrategia Inviable ante CNBV</span>
                   </div>
-                  <p className="text-[11px] text-rose-300/90 leading-tight">
+                  <p className="text-[10px] sm:text-[11px] text-rose-300/90 leading-tight">
                     Morosidad ({formatPercent(simulation.expected_portfolio_pd_pct)} vs 6.0% máx) y absorción crítica de reservas ({formatMXN(simulation.total_regulatory_reserves_mxn)}).
                   </p>
                 </div>
               ) : viabilityStatus === 'moderate' ? (
-                <div className="mt-3 pt-2.5 border-t border-amber-500/30 space-y-0.5">
+                <div className="mt-2.5 sm:mt-3 pt-2 border-t border-amber-500/30 space-y-0.5">
                   <div className="flex items-center gap-1.5 text-xs font-bold text-amber-400">
                     <AlertTriangle className="w-3.5 h-3.5 shrink-0 text-amber-400" />
                     <span>Precaución Regulatoria</span>
                   </div>
-                  <p className="text-[11px] text-amber-300/90 leading-tight">
+                  <p className="text-[10px] sm:text-[11px] text-amber-300/90 leading-tight">
                     Morosidad en vigilancia ({formatPercent(simulation.expected_portfolio_pd_pct)}) con reservas preventivas crecientes.
                   </p>
                 </div>
               ) : (
-                <div className="mt-3 text-xs text-slate-400 pt-2.5 border-t border-white/5 flex items-center justify-between">
+                <div className="mt-2.5 sm:mt-3 text-[11px] sm:text-xs text-slate-400 pt-2 border-t border-white/5 flex items-center justify-between">
                   <span>Costo Cap. Reservas (12%): <strong className="text-slate-200 font-mono">{formatMXN(reservesCapitalCost)}</strong></span>
-                  <span className="text-[11px] text-emerald-400 font-medium">✓ Solvente CNBV</span>
+                  <span className="text-[10px] sm:text-[11px] text-emerald-400 font-medium">✓ Solvente CNBV</span>
                 </div>
               )}
             </div>
           </div>
 
           {/* Fila 2: Indicadores de Riesgo, Eficiencia y Regulación CNBV (3 columnas equilibradas) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {/* Tarjeta 3: Tasa de Aprobación */}
-            <div className="liquid-glass-subtle p-5 rounded-2xl border border-white/10 shadow-lg hover:border-white/20 transition flex flex-col justify-between min-h-[145px]">
+            <div className="liquid-glass-subtle p-3.5 sm:p-5 rounded-2xl border border-white/10 shadow-lg hover:border-white/20 transition flex flex-col justify-between min-h-[130px] sm:min-h-[145px]">
               <div>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">
+                  <span className="text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider block">
                     Tasa de Aprobación
                   </span>
                   <button
@@ -802,29 +802,29 @@ export function PortfolioStrategyView() {
                     className="text-slate-400 hover:text-white transition cursor-pointer"
                     title="Ver explicación de la Tasa de Aprobación"
                   >
-                    <HelpCircle className="w-3.5 h-3.5" />
+                    <HelpCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   </button>
                 </div>
-                <div className="my-2">
-                  <span className="text-2xl sm:text-3xl lg:text-4xl font-black text-white font-mono tracking-tight block">
+                <div className="my-1.5 sm:my-2">
+                  <span className="text-xl sm:text-2xl lg:text-3xl font-black text-white font-mono tracking-tight block">
                     {formatPercent(simulation.approval_rate_pct)}
                   </span>
-                  <span className="text-xs text-emerald-400 font-semibold font-mono block mt-1">
+                  <span className="text-[11px] sm:text-xs text-emerald-400 font-semibold font-mono block mt-0.5 sm:mt-1">
                     {simulation.approved_contracts.toLocaleString()} contratos autorizados
                   </span>
                 </div>
               </div>
-              <div className="mt-3 text-xs text-slate-400 pt-2 border-t border-white/5 flex items-center justify-between">
+              <div className="mt-2 sm:mt-3 text-[11px] sm:text-xs text-slate-400 pt-2 border-t border-white/5 flex items-center justify-between">
                 <span>Base analizada:</span>
-                <strong className="text-slate-200 font-mono text-xs">{simulation.total_applications.toLocaleString()} solicitudes</strong>
+                <strong className="text-slate-200 font-mono text-[11px] sm:text-xs">{simulation.total_applications.toLocaleString()} solicitudes</strong>
               </div>
             </div>
 
             {/* Tarjeta 4: Probabilidad de Incumplimiento Ponderada */}
-            <div className="liquid-glass-subtle p-5 rounded-2xl border border-white/10 shadow-lg hover:border-white/20 transition flex flex-col justify-between min-h-[145px]">
+            <div className="liquid-glass-subtle p-3.5 sm:p-5 rounded-2xl border border-white/10 shadow-lg hover:border-white/20 transition flex flex-col justify-between min-h-[130px] sm:min-h-[145px]">
               <div>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">
+                  <span className="text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider block">
                     PD Ponderada de Cartera
                   </span>
                   <button
@@ -833,12 +833,12 @@ export function PortfolioStrategyView() {
                     className="text-slate-400 hover:text-white transition cursor-pointer"
                     title="Ver umbral prudencial de morosidad CNBV"
                   >
-                    <HelpCircle className="w-3.5 h-3.5" />
+                    <HelpCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   </button>
                 </div>
-                <div className="my-2">
+                <div className="my-1.5 sm:my-2">
                   <span
-                    className={`text-2xl sm:text-3xl lg:text-4xl font-black font-mono tracking-tight block ${
+                    className={`text-xl sm:text-2xl lg:text-3xl font-black font-mono tracking-tight block ${
                       simulation.expected_portfolio_pd_pct > 9.0
                         ? 'text-rose-400'
                         : simulation.expected_portfolio_pd_pct > 6.0
@@ -848,22 +848,22 @@ export function PortfolioStrategyView() {
                   >
                     {formatPercent(simulation.expected_portfolio_pd_pct)}
                   </span>
-                  <span className="text-xs text-slate-400 font-mono block mt-1">
-                    Mora Histórica Observada: {formatPercent(simulation.observed_default_rate_pct)}
+                  <span className="text-[11px] sm:text-xs text-slate-400 font-mono block mt-0.5 sm:mt-1">
+                    Mora Observada: {formatPercent(simulation.observed_default_rate_pct)}
                   </span>
                 </div>
               </div>
-              <div className="mt-3 text-xs text-slate-400 pt-2 border-t border-white/5 flex items-center justify-between">
+              <div className="mt-2 sm:mt-3 text-[11px] sm:text-xs text-slate-400 pt-2 border-t border-white/5 flex items-center justify-between">
                 <span>Pérdida Esperada (EL):</span>
-                <strong className="text-rose-400 font-mono text-xs">{formatMXN(simulation.total_expected_loss_mxn)}</strong>
+                <strong className="text-rose-400 font-mono text-[11px] sm:text-xs">{formatMXN(simulation.total_expected_loss_mxn)}</strong>
               </div>
             </div>
 
             {/* Tarjeta 5: Reservas Regulatorias (CNBV CUB) con Índice de Absorción */}
-            <div className="liquid-glass-subtle p-5 rounded-2xl border border-white/10 shadow-lg hover:border-white/20 transition flex flex-col justify-between min-h-[145px]">
+            <div className="liquid-glass-subtle p-3.5 sm:p-5 rounded-2xl border border-white/10 shadow-lg hover:border-white/20 transition flex flex-col justify-between min-h-[130px] sm:min-h-[145px]">
               <div>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">
+                  <span className="text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider block">
                     Reservas Regulatorias (CUB)
                   </span>
                   <button
@@ -872,30 +872,30 @@ export function PortfolioStrategyView() {
                     className="text-slate-400 hover:text-white transition cursor-pointer"
                     title="Ver explicación de las Reservas Regulatorias y Ratio de Absorción"
                   >
-                    <HelpCircle className="w-3.5 h-3.5" />
+                    <HelpCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   </button>
                 </div>
-                <div className="my-2">
+                <div className="my-1.5 sm:my-2">
                   <div className="flex items-baseline flex-wrap gap-x-1.5">
-                    <span className="text-2xl sm:text-3xl lg:text-4xl font-black text-teal-400 font-mono tracking-tight whitespace-nowrap">
+                    <span className="text-xl sm:text-2xl lg:text-3xl font-black text-teal-400 font-mono tracking-tight whitespace-nowrap">
                       {formatMXNValue(simulation.total_regulatory_reserves_mxn)}
                     </span>
-                    <span className="text-xs sm:text-sm font-semibold text-slate-400 uppercase tracking-wider">
+                    <span className="text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider">
                       MXN
                     </span>
                   </div>
-                  <span className="text-xs text-slate-400 font-mono block mt-1">
+                  <span className="text-[11px] sm:text-xs text-slate-400 font-mono block mt-0.5 sm:mt-1">
                     Provisión Contable Anexo 33
                   </span>
                 </div>
               </div>
 
               {/* Métrica de Ratio de Absorción de Reservas */}
-              <div className="mt-3 pt-2 border-t border-white/5 space-y-1">
-                <div className="flex items-center justify-between text-xs">
+              <div className="mt-2 sm:mt-3 pt-2 border-t border-white/5 space-y-1">
+                <div className="flex items-center justify-between text-[11px] sm:text-xs">
                   <span className="text-slate-400">Absorción Utilidad:</span>
                   <span
-                    className={`font-mono font-bold px-2 py-0.5 rounded text-[11px] border ${
+                    className={`font-mono font-bold px-1.5 sm:px-2 py-0.5 rounded text-[10px] sm:text-[11px] border ${
                       absorptionRatioPct > 60
                         ? 'bg-rose-500/20 text-rose-300 border-rose-500/40'
                         : absorptionRatioPct > 40
@@ -1113,20 +1113,20 @@ export function PortfolioStrategyView() {
           onClick={() => setIsGlossaryOpen(false)}
         >
           <div
-            className="liquid-glass border border-white/20 rounded-2xl max-w-3xl sm:max-w-4xl w-full max-h-[88vh] overflow-y-auto shadow-2xl relative text-left animate-in zoom-in-95 duration-200 p-6 sm:p-8"
+            className="liquid-glass border border-white/20 rounded-2xl max-w-3xl sm:max-w-4xl w-full max-h-[88vh] overflow-y-auto shadow-2xl relative text-left animate-in zoom-in-95 duration-200 p-3.5 sm:p-6 lg:p-8"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header del Modal con botón "X" en la esquina superior derecha */}
-            <div className="flex items-start justify-between pb-5 border-b border-white/10 mb-6">
-              <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 shrink-0">
-                  <BookOpen className="w-6 h-6" />
+            <div className="flex items-start justify-between pb-3.5 sm:pb-5 border-b border-white/10 mb-4 sm:mb-6">
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                <div className="p-2 sm:p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 shrink-0">
+                  <BookOpen className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
                 <div>
-                  <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight">
+                  <h3 className="text-base sm:text-xl font-bold text-white tracking-tight">
                     Glosario y Definiciones de Cartera
                   </h3>
-                  <p className="text-xs text-slate-400 mt-0.5">
+                  <p className="text-[11px] sm:text-xs text-slate-400 mt-0.5">
                     Fundamento metodológico, fórmulas financieras y marco regulatorio (CNBV CUB Anexo 33).
                   </p>
                 </div>
@@ -1135,15 +1135,15 @@ export function PortfolioStrategyView() {
               <button
                 type="button"
                 onClick={() => setIsGlossaryOpen(false)}
-                className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition cursor-pointer shrink-0"
+                className="p-1.5 sm:p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition cursor-pointer shrink-0"
                 title="Cerrar glosario"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
             </div>
 
-            {/* Contenido Estructurado de los 8 Términos */}
-            <div className="space-y-6">
+            {/* Contenido Estructurado de los Términos */}
+            <div className="space-y-4 sm:space-y-6">
               {GLOSSARY_ITEMS.map((item) => {
                 const isHighlighted = glossaryTargetId === item.id
                 return (
