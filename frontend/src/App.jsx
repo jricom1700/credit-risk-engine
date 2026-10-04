@@ -1,121 +1,103 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import React, { useState, useEffect } from 'react'
+import { Navbar } from './components/Navbar'
+import { UnderwritingView } from './components/UnderwritingView'
+import { PortfolioStrategyView } from './components/PortfolioStrategyView'
+import { NotebooksPage } from './pages/NotebooksPage'
+import { checkHealth, getModelMetadata } from './services/api'
+import { AlertCircle } from 'lucide-react'
 
-function App() {
-  const [count, setCount] = useState(0)
+export function App() {
+  const [activeTab, setActiveTab] = useState('underwriting')
+  const [backendStatus, setBackendStatus] = useState({ healthy: true, checking: true })
+  const [modelMetadata, setModelMetadata] = useState(null)
+  const [theme, setTheme] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('cre_theme') || 'dark'
+    }
+    return 'dark'
+  })
+
+  useEffect(() => {
+    const root = document.documentElement
+    if (theme === 'light') {
+      root.classList.add('light')
+      root.classList.remove('dark')
+    } else {
+      root.classList.add('dark')
+      root.classList.remove('light')
+    }
+    localStorage.setItem('cre_theme', theme)
+  }, [theme])
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))
+  }
+
+  useEffect(() => {
+    let isMounted = true
+
+    const verifyBackend = async () => {
+      try {
+        const health = await checkHealth()
+        if (isMounted) {
+          setBackendStatus({ healthy: health.status === 'healthy', checking: false })
+        }
+        const meta = await getModelMetadata()
+        if (isMounted) {
+          setModelMetadata(meta)
+        }
+      } catch {
+        if (isMounted) {
+          setBackendStatus({ healthy: false, checking: false })
+        }
+      }
+    }
+
+    verifyBackend()
+    const interval = setInterval(verifyBackend, 20000)
+
+    return () => {
+      isMounted = false
+      clearInterval(interval)
+    }
+  }, [])
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className={`min-h-screen ${theme === 'dark' ? 'bg-slate-950 text-slate-100' : 'bg-slate-100 text-slate-900'} flex flex-col font-sans selection:bg-emerald-500/30 selection:text-emerald-200 relative overflow-x-hidden transition-colors duration-200`}>
+      {/* Luces difusas orgánicas de fondo (sutiles y sin sobre-saturar colores) */}
+      <div className={`fixed top-[-10%] left-[-5%] w-[50vw] h-[50vw] rounded-full ${theme === 'dark' ? 'bg-emerald-500/5' : 'bg-emerald-400/15'} blur-[130px] pointer-events-none -z-10`} />
+      <div className={`fixed top-[20%] right-[-10%] w-[45vw] h-[45vw] rounded-full ${theme === 'dark' ? 'bg-sky-500/5' : 'bg-sky-400/15'} blur-[140px] pointer-events-none -z-10`} />
+      <div className={`fixed bottom-[-10%] left-[20%] w-[50vw] h-[40vw] rounded-full ${theme === 'dark' ? 'bg-indigo-500/5' : 'bg-indigo-400/15'} blur-[130px] pointer-events-none -z-10`} />
 
-      <div className="ticks"></div>
+      {/* Header y Navegación Secundaria */}
+      <Navbar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        modelMetadata={modelMetadata}
+        theme={theme}
+        toggleTheme={toggleTheme}
+      />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+      {/* Alerta de Desconexión solo si falla el backend */}
+      {!backendStatus.checking && !backendStatus.healthy && (
+        <div className="bg-rose-500/10 border-b border-rose-500/30 px-4 py-2.5 text-center text-xs text-rose-300 flex items-center justify-center gap-2">
+          <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+          <span>
+            No se detectó el backend de FastAPI en <code>http://localhost:8000</code>. Inicia el servidor con:{' '}
+            <code className="bg-rose-950/60 px-2 py-0.5 rounded text-rose-200 font-mono text-[11px]">
+              python -m uvicorn app.main:app --port 8000
+            </code>
+          </span>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      )}
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+      {/* Contenido Principal */}
+      <main className="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-10 py-6">
+        {activeTab === 'underwriting' && <UnderwritingView />}
+        {activeTab === 'portfolio' && <PortfolioStrategyView />}
+        {(activeTab === 'methodology' || activeTab === 'notebooks') && <NotebooksPage theme={theme} />}
+      </main>
+    </div>
   )
 }
 
