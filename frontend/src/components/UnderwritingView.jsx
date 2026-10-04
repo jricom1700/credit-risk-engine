@@ -14,7 +14,8 @@ import {
   TrendingUp,
   ExternalLink,
   X,
-  Layers
+  Layers,
+  Info
 } from 'lucide-react'
 import { scoreIndividual } from '../services/api'
 import { ScoreGauge } from './ScoreGauge'
@@ -22,13 +23,13 @@ import { formatMXN, formatMXNValue, formatPercent, getCNBVBadgeColor } from '../
 
 // Matriz y tabla de equivalencias regulatorias de la CNBV (Circular Única de Bancos - CUB Anexo 33)
 const CNBV_EQUIVALENCE_TABLE = [
-  { grade: 'A-1', maxPd: '0.00% - 2.00%', minReserve: '0.50%', desc: 'Riesgo Mínimo', policy: 'Aprobación Inmediata / Tasa Preferencial' },
-  { grade: 'A-2', maxPd: '2.01% - 3.00%', minReserve: '0.90%', desc: 'Riesgo Muy Bajo', policy: 'Aprobación Estándar' },
-  { grade: 'B-1', maxPd: '3.01% - 4.00%', minReserve: '1.50%', desc: 'Riesgo Bajo', policy: 'Aprobación con Monitoreo' },
-  { grade: 'B-2', maxPd: '4.01% - 6.50%', minReserve: '2.50%', desc: 'Riesgo Moderado-Bajo', policy: 'Aprobación Condicionada' },
-  { grade: 'C-1', maxPd: '6.51% - 10.00%', minReserve: '5.00%', desc: 'Riesgo Moderado-Alto', policy: 'Revisión Manual / Comité' },
-  { grade: 'C-2', maxPd: '10.01% - 20.00%', minReserve: '15.00%', desc: 'Riesgo Alto', policy: 'Revisión Estricta / Requiere Aval' },
-  { grade: 'D',   maxPd: '20.01% - 50.00%', minReserve: '45.00%', desc: 'Riesgo Muy Alto', policy: 'Rechazo Institucional' },
+  { grade: 'A-1', maxPd: '0.00% - 2.00%', minReserve: '0.50%', desc: 'Mínimo', policy: 'Aprobación Inmediata / Tasa Preferencial' },
+  { grade: 'A-2', maxPd: '2.01% - 3.00%', minReserve: '0.90%', desc: 'Muy Bajo', policy: 'Aprobación Estándar' },
+  { grade: 'B-1', maxPd: '3.01% - 4.00%', minReserve: '1.50%', desc: 'Bajo', policy: 'Aprobación con Monitoreo' },
+  { grade: 'B-2', maxPd: '4.01% - 6.50%', minReserve: '2.50%', desc: 'Moderado-Bajo', policy: 'Aprobación Condicionada' },
+  { grade: 'C-1', maxPd: '6.51% - 10.00%', minReserve: '5.00%', desc: 'Moderado-Alto', policy: 'Revisión Manual / Comité' },
+  { grade: 'C-2', maxPd: '10.01% - 20.00%', minReserve: '15.00%', desc: 'Alto', policy: 'Revisión Estricta / Requiere Aval' },
+  { grade: 'D',   maxPd: '20.01% - 50.00%', minReserve: '45.00%', desc: 'Muy Alto', policy: 'Rechazo Institucional' },
   { grade: 'E',   maxPd: '> 50.00%', minReserve: '80.00%', desc: 'Pérdida Severa', policy: 'Veto Obligatorio (Quebranto)' },
 ]
 
@@ -297,7 +298,7 @@ export function UnderwritingView() {
         howItWasCalculated: [
           `Puntaje en Scorecard: ${result.credit_score} puntos (escala estándar 300 - 850).`,
           `Probabilidad de Incumplimiento (PD) calibrada: ${pdFormatted} a 12 meses.`,
-          `Matriz Regulatoria CNBV: Conforme a la CUB Anexo 33, una PD de ${pdFormatted} ubica a esta solicitud en Grado ${result.cnbv_rating} (${result.cnbv_description || 'Riesgo Evaluado'}).`,
+          `Matriz Regulatoria CNBV: Conforme a la CUB Anexo 33, una PD de ${pdFormatted} ubica a esta solicitud en Grado ${result.cnbv_rating} (${(result.cnbv_description || 'Evaluado').replace(/^Riesgo\s+/i, '')}).`,
           `Reserva Preventiva Obligatoria: Este grado exige constituir una provisión contable de ${reservePctFormatted} sobre el monto financiado (${reserveMonto}).`,
         ],
         businessImpact: `Determina el porcentaje mínimo de reservas preventivas obligatorias (${reservePctFormatted}) que la entidad debe constituir en balance y su viabilidad ante comités de crédito.`,
@@ -329,7 +330,7 @@ export function UnderwritingView() {
         formulaExplanation: 'Exposición al Incumplimiento (EAD) multiplicada por el porcentaje fijado por la CNBV según el Grado de Riesgo asignado.',
         howItWasCalculated: [
           `Exposición al Incumplimiento (EAD): ${formatMXN(loanAmnt)} (monto total solicitado por el cliente).`,
-          `Grado asignado por la CNBV: Categoría de riesgo ${result.cnbv_rating} (${result.cnbv_description || 'Evaluado'}).`,
+          `Grado asignado por la CNBV: Categoría ${result.cnbv_rating} (${(result.cnbv_description || 'Evaluado').replace(/^Riesgo\s+/i, '')}).`,
           `Regla regulatoria CUB: Para la categoría ${result.cnbv_rating}, la CNBV fija una reserva mínima obligatoria del ${reservePctFormatted}.`,
           `Monto en dinero sobre esta operación: Para el financiamiento de ${formatMXN(loanAmnt)}, la entidad debe apartar ${reserveMonto} en sus reservas preventivas contables.`,
         ],
@@ -703,7 +704,7 @@ export function UnderwritingView() {
                       {result.cnbv_rating}
                     </span>
                     <span className="text-xs sm:text-base font-bold text-white">
-                      {result.cnbv_description || 'Riesgo Evaluado'}
+                      {(result.cnbv_description || 'Evaluado').replace(/^Riesgo\s+/i, '')}
                     </span>
                   </div>
                 </div>
@@ -714,16 +715,130 @@ export function UnderwritingView() {
                     e.stopPropagation()
                     setSelectedKpi('cnbv_rating')
                   }}
-                  className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl text-[11px] sm:text-xs font-semibold bg-white/10 text-white border border-white/20 hover:bg-white/20 transition cursor-pointer"
+                  className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl text-[11px] sm:text-xs font-semibold bg-white/10 text-white border border-white/20 hover:bg-white/20 transition cursor-pointer flex items-center gap-1"
+                  title="Ver explicación del Grado CNBV"
                 >
-                  ¿Qué significa?
+                  <span className="hidden sm:inline">¿Qué significa?</span>
+                  <Info className="w-3.5 h-3.5 text-slate-300 sm:hidden" />
                 </button>
               </div>
             </div>
 
-            {/* 2. KPIS REGULATORIOS Y FINANCIEROS (CON CONTENEDOR DE MONTO A PRESTAR) */}
+            {/* 2. KPIS REGULATORIOS Y FINANCIEROS */}
             <div className="pt-3 sm:pt-4 border-t border-white/10">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 text-xs">
+              {/* Formato Píldora para Móvil (Clave : Valor + Botón Info) */}
+              <div className="sm:hidden flex flex-col gap-2">
+                {/* Píldora 1: Monto Solicitado */}
+                <div
+                  onClick={() => setSelectedKpi('loan_amount')}
+                  className="flex items-center justify-between px-3.5 py-2 rounded-full liquid-glass-subtle border border-white/10 hover:border-white/20 transition cursor-pointer shadow-sm group"
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider shrink-0">
+                      Monto:
+                    </span>
+                    <span className="text-xs font-bold text-emerald-400 font-mono tracking-tight truncate">
+                      {formatMXNValue(numericLoanAmnt)} <span className="text-[10px] text-slate-400 font-sans">MXN</span>
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setSelectedKpi('loan_amount')
+                    }}
+                    className="p-1 rounded-full text-slate-400 hover:text-emerald-300 transition shrink-0 ml-1.5 cursor-pointer"
+                    title="Ver más información sobre Monto Solicitado"
+                    aria-label="Más información sobre Monto Solicitado"
+                  >
+                    <Info className="w-4 h-4 text-emerald-400" />
+                  </button>
+                </div>
+
+                {/* Píldora 2: Probabilidad de Default */}
+                <div
+                  onClick={() => setSelectedKpi('pd')}
+                  className="flex items-center justify-between px-3.5 py-2 rounded-full liquid-glass-subtle border border-white/10 hover:border-white/20 transition cursor-pointer shadow-sm group"
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider shrink-0">
+                      PD (12m):
+                    </span>
+                    <span className="text-xs font-bold text-sky-300 font-mono tracking-tight truncate">
+                      {formatPercent(result.probability_of_default * 100, 2)}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setSelectedKpi('pd')
+                    }}
+                    className="p-1 rounded-full text-slate-400 hover:text-sky-300 transition shrink-0 ml-1.5 cursor-pointer"
+                    title="Ver más información sobre Probabilidad de Default"
+                    aria-label="Más información sobre Probabilidad de Default"
+                  >
+                    <Info className="w-4 h-4 text-sky-400" />
+                  </button>
+                </div>
+
+                {/* Píldora 3: Reserva Preventiva CUB */}
+                <div
+                  onClick={() => setSelectedKpi('reserve')}
+                  className="flex items-center justify-between px-3.5 py-2 rounded-full liquid-glass-subtle border border-white/10 hover:border-white/20 transition cursor-pointer shadow-sm group"
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider shrink-0">
+                      Reserva CUB:
+                    </span>
+                    <span className="text-xs font-bold text-amber-300 font-mono tracking-tight truncate">
+                      {formatPercent(result.cnbv_minimum_reserve_pct)}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setSelectedKpi('reserve')
+                    }}
+                    className="p-1 rounded-full text-slate-400 hover:text-amber-300 transition shrink-0 ml-1.5 cursor-pointer"
+                    title="Ver más información sobre Reserva Preventiva"
+                    aria-label="Más información sobre Reserva Preventiva"
+                  >
+                    <Info className="w-4 h-4 text-amber-400" />
+                  </button>
+                </div>
+
+                {/* Píldora 4: Pérdida Esperada */}
+                <div
+                  onClick={() => setSelectedKpi('el')}
+                  className="flex items-center justify-between px-3.5 py-2 rounded-full liquid-glass-subtle border border-white/10 hover:border-white/20 transition cursor-pointer shadow-sm group"
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider shrink-0">
+                      Pérdida (EL):
+                    </span>
+                    <span className="text-xs font-bold text-slate-100 font-mono tracking-tight truncate">
+                      {formatMXNValue(result.expected_loss_mxn)} <span className="text-[10px] text-slate-400 font-sans">MXN</span>
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setSelectedKpi('el')
+                    }}
+                    className="p-1 rounded-full text-slate-400 hover:text-white transition shrink-0 ml-1.5 cursor-pointer"
+                    title="Ver más información sobre Pérdida Esperada"
+                    aria-label="Más información sobre Pérdida Esperada"
+                  >
+                    <Info className="w-4 h-4 text-slate-300" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Formato Tarjetas para Tablet y Desktop */}
+              <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 text-xs">
                 {/* KPI 0: Monto a Prestar (Crédito Solicitado) */}
                 <div
                   onClick={() => setSelectedKpi('loan_amount')}
@@ -1004,7 +1119,7 @@ export function UnderwritingView() {
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header de la ventana con título, indicador y única 'X' para cerrar en esquina superior derecha */}
-              <div className="sticky top-0 liquid-glass-subtle border-b border-white/10 p-3.5 sm:p-5 flex items-center justify-between z-10">
+              <div className="sticky top-0 bg-slate-900/95 sm:bg-slate-900/90 backdrop-blur-xl border-b border-white/10 p-3.5 sm:p-5 flex items-center justify-between z-20 shadow-md">
                 <div className="flex items-center gap-2 sm:gap-3 flex-wrap pr-2 sm:pr-4">
                   <span className={`px-2 py-0.5 rounded-md text-[11px] sm:text-xs font-bold border ${kpi.badgeColor}`}>
                     {kpi.badge}
@@ -1165,7 +1280,7 @@ export function UnderwritingView() {
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header de la ventana con título, resumen y única 'X' para cerrar en esquina superior derecha */}
-            <div className="sticky top-0 liquid-glass-subtle border-b border-white/10 p-5 flex items-center justify-between z-10">
+            <div className="sticky top-0 bg-slate-900/95 sm:bg-slate-900/90 backdrop-blur-xl border-b border-white/10 p-3.5 sm:p-5 flex items-center justify-between z-20 shadow-md">
               <div>
                 <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
                   <Layers className="w-5 h-5 text-sky-400" />

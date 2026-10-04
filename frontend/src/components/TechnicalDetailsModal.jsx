@@ -93,7 +93,7 @@ export function TechnicalDetailsModal({ isOpen, onClose, result }) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <div className="bg-slate-900/70 p-2.5 rounded-lg">
                 <span className="text-slate-400 block">Nivel de Riesgo Regulatorio</span>
-                <span className="font-semibold text-white mt-0.5 block">{result.cnbv_description || 'Evaluado por CUB'}</span>
+                <span className="font-semibold text-white mt-0.5 block">{(result.cnbv_description || 'Evaluado por CUB').replace(/^Riesgo\s+/i, '')}</span>
               </div>
               <div className="bg-slate-900/70 p-2.5 rounded-lg">
                 <span className="text-slate-400 block">Reserva Preventiva Obligatoria</span>

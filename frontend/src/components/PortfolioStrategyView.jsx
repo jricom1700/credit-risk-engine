@@ -481,17 +481,17 @@ export function PortfolioStrategyView() {
             {/* Fila Superior de la Sección: Selector de Estrategia (ahora abajo) + Parámetros Institucionales Fijos */}
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 p-3.5 rounded-2xl liquid-glass-subtle border border-white/10">
               {/* Selector Desplegable de Escenarios */}
-              <div className="flex items-center gap-3">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 w-full lg:w-auto">
                 <label htmlFor="strategy-select" className="text-xs font-semibold text-slate-300 uppercase tracking-wider shrink-0 flex items-center gap-1.5">
                   <Sliders className="w-3.5 h-3.5 text-emerald-400" />
                   <span>Estrategia de Cartera:</span>
                 </label>
-                <div className="relative">
+                <div className="relative w-full sm:w-auto min-w-0 max-w-full">
                   <select
                     id="strategy-select"
                     value={currentPresetKey}
                     onChange={(e) => handlePresetSelect(e.target.value)}
-                    className="appearance-none pl-3 pr-8 py-1.5 rounded-xl text-xs font-semibold liquid-glass-input text-white cursor-pointer focus:outline-none transition shadow-sm border border-white/15"
+                    className="w-full sm:w-auto max-w-full appearance-none pl-3 pr-8 py-2 sm:py-1.5 rounded-xl text-xs font-semibold liquid-glass-input text-white cursor-pointer focus:outline-none transition shadow-sm border border-white/15"
                   >
                     <option value="conservative" className="bg-slate-900 text-white">Conservadora (Baja Mora)</option>
                     <option value="balanced" className="bg-slate-900 text-white">Equilibrada (Institucional)</option>
@@ -644,13 +644,188 @@ export function PortfolioStrategyView() {
         </div>
       )}
 
-      {/* 3. Tarjetas KPI de Resultados Liquid Glass Reacomodadas (2 filas para evitar encimamiento con números grandes) */}
+      {/* 3. Tarjetas KPI de Resultados: Formato Píldora en Móvil vs Tarjetas en Escritorio */}
       {simulation && (
         <div className="space-y-3 sm:space-y-4">
-          {/* Fila 1: Indicadores Financieros Principales de Capital y Margen (2 columnas amplias) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-            {/* Tarjeta 1: Monto Total Prestado (Cartera Colocada) */}
-            <div className="liquid-glass-subtle p-3.5 sm:p-5 lg:p-6 rounded-2xl border border-white/10 shadow-lg hover:border-white/20 transition flex flex-col justify-between min-h-[145px] sm:min-h-[160px]">
+          {/* Versión Móvil: Formato Píldora Clave : Valor + Botón (ℹ) (Sin truncar datos) */}
+          <div className="md:hidden flex flex-col gap-2.5">
+            {/* Píldora 1: Cartera Colocada */}
+            <div
+              onClick={() => openGlossary('approved_volume')}
+              className="flex items-center justify-between gap-2.5 p-3 rounded-2xl liquid-glass-subtle border border-white/10 hover:border-white/20 transition cursor-pointer shadow-sm group"
+            >
+              <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider shrink-0">
+                  Cartera Colocada:
+                </span>
+                <span className="text-xs font-bold text-emerald-400 font-mono tracking-tight">
+                  {formatMXNValue(simulation.approved_volume_mxn)} <span className="text-[10px] text-slate-400 font-sans">MXN</span>
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  openGlossary('approved_volume')
+                }}
+                className="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-emerald-300 transition shrink-0 cursor-pointer"
+                title="Más información sobre Cartera Colocada"
+                aria-label="Más información sobre Cartera Colocada"
+              >
+                <Info className="w-4 h-4 text-emerald-400" />
+              </button>
+            </div>
+
+            {/* Píldora 2: Margen Financiero Neto (RAROC) */}
+            <div
+              onClick={() => openGlossary('margin')}
+              className={`flex items-center justify-between gap-2.5 p-3 rounded-2xl border transition cursor-pointer shadow-sm group ${
+                viabilityStatus === 'critical'
+                  ? 'liquid-glass border-rose-500/50 bg-rose-950/20'
+                  : viabilityStatus === 'moderate'
+                  ? 'liquid-glass border-amber-500/40 bg-amber-950/15'
+                  : 'liquid-glass-subtle border-white/10 hover:border-white/20'
+              }`}
+            >
+              <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider shrink-0">
+                  Margen Neto:
+                </span>
+                <span
+                  className={`text-xs font-bold font-mono tracking-tight ${
+                    viabilityStatus === 'critical'
+                      ? 'text-rose-400'
+                      : viabilityStatus === 'moderate'
+                      ? 'text-amber-400'
+                      : 'text-emerald-400'
+                  }`}
+                >
+                  {formatMXNValue(netFinancialMarginRAROC)} <span className="text-[10px] text-slate-400 font-sans">MXN</span>
+                </span>
+                <span
+                  className={`text-[10px] font-mono font-semibold ${
+                    netFinancialMarginRAROC <= 0 ? 'text-rose-400' : 'text-emerald-300'
+                  }`}
+                >
+                  ({formatPercent(rocRAROC)} ROC)
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  openGlossary('margin')
+                }}
+                className="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-emerald-300 transition shrink-0 cursor-pointer"
+                title="Más información sobre Margen Financiero Neto"
+                aria-label="Más información sobre Margen Financiero Neto"
+              >
+                <Info className="w-4 h-4 text-emerald-400" />
+              </button>
+            </div>
+
+            {/* Píldora 3: Tasa de Aprobación */}
+            <div
+              onClick={() => openGlossary('tradeoff')}
+              className="flex items-center justify-between gap-2.5 p-3 rounded-2xl liquid-glass-subtle border border-white/10 hover:border-white/20 transition cursor-pointer shadow-sm group"
+            >
+              <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider shrink-0">
+                  Aprobación:
+                </span>
+                <span className="text-xs font-bold text-white font-mono tracking-tight">
+                  {formatPercent(simulation.approval_rate_pct)}
+                </span>
+                <span className="text-[10px] text-emerald-400 font-sans">
+                  ({simulation.approved_contracts.toLocaleString()} contratos)
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  openGlossary('tradeoff')
+                }}
+                className="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition shrink-0 cursor-pointer"
+                title="Más información sobre Tasa de Aprobación"
+                aria-label="Más información sobre Tasa de Aprobación"
+              >
+                <Info className="w-4 h-4 text-emerald-400" />
+              </button>
+            </div>
+
+            {/* Píldora 4: PD Ponderada */}
+            <div
+              onClick={() => openGlossary('prudential_threshold')}
+              className="flex items-center justify-between gap-2.5 p-3 rounded-2xl liquid-glass-subtle border border-white/10 hover:border-white/20 transition cursor-pointer shadow-sm group"
+            >
+              <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider shrink-0">
+                  PD Ponderada:
+                </span>
+                <span
+                  className={`text-xs font-bold font-mono tracking-tight ${
+                    simulation.expected_portfolio_pd_pct > 9.0
+                      ? 'text-rose-400'
+                      : simulation.expected_portfolio_pd_pct > 6.0
+                      ? 'text-amber-400'
+                      : 'text-emerald-400'
+                  }`}
+                >
+                  {formatPercent(simulation.expected_portfolio_pd_pct)}
+                </span>
+                <span className="text-[10px] text-slate-400 font-sans">
+                  (Mora {formatPercent(simulation.observed_default_rate_pct)})
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  openGlossary('prudential_threshold')
+                }}
+                className="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-sky-300 transition shrink-0 cursor-pointer"
+                title="Más información sobre Probabilidad de Incumplimiento"
+                aria-label="Más información sobre Probabilidad de Incumplimiento"
+              >
+                <Info className="w-4 h-4 text-sky-400" />
+              </button>
+            </div>
+
+            {/* Píldora 5: Reservas Regulatorias (CUB) */}
+            <div
+              onClick={() => openGlossary('reserves')}
+              className="flex items-center justify-between gap-2.5 p-3 rounded-2xl liquid-glass-subtle border border-white/10 hover:border-white/20 transition cursor-pointer shadow-sm group"
+            >
+              <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider shrink-0">
+                  Reservas CUB:
+                </span>
+                <span className="text-xs font-bold text-teal-400 font-mono tracking-tight">
+                  {formatMXNValue(simulation.total_regulatory_reserves_mxn)} <span className="text-[10px] text-slate-400 font-sans">MXN</span>
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  openGlossary('reserves')
+                }}
+                className="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-teal-300 transition shrink-0 cursor-pointer"
+                title="Más información sobre Reservas Regulatorias"
+                aria-label="Más información sobre Reservas Regulatorias"
+              >
+                <Info className="w-4 h-4 text-teal-400" />
+              </button>
+            </div>
+          </div>
+
+          {/* Versión Tablet y Escritorio: Tarjetas Expandidas en 2 Filas */}
+          <div className="hidden md:block space-y-4">
+            {/* Fila 1: Indicadores Financieros Principales de Capital y Margen (2 columnas amplias) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+              {/* Tarjeta 1: Monto Total Prestado (Cartera Colocada) */}
+              <div className="liquid-glass-subtle p-3.5 sm:p-5 lg:p-6 rounded-2xl border border-white/10 shadow-lg hover:border-white/20 transition flex flex-col justify-between min-h-[145px] sm:min-h-[160px]">
               <div>
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider block">
@@ -923,6 +1098,7 @@ export function PortfolioStrategyView() {
             </div>
           </div>
         </div>
+      </div>
       )}
 
       {/* Gráficos de Portafolio y Cascada Liquid Glass con Tooltips Opacos */}
@@ -1113,11 +1289,11 @@ export function PortfolioStrategyView() {
           onClick={() => setIsGlossaryOpen(false)}
         >
           <div
-            className="liquid-glass border border-white/20 rounded-2xl max-w-3xl sm:max-w-4xl w-full max-h-[88vh] overflow-y-auto shadow-2xl relative text-left animate-in zoom-in-95 duration-200 p-3.5 sm:p-6 lg:p-8"
+            className="liquid-glass border border-white/20 rounded-2xl max-w-3xl sm:max-w-4xl w-full max-h-[88vh] overflow-y-auto shadow-2xl relative text-left animate-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header del Modal con botón "X" en la esquina superior derecha */}
-            <div className="flex items-start justify-between pb-3.5 sm:pb-5 border-b border-white/10 mb-4 sm:mb-6">
+            <div className="sticky top-0 bg-slate-900/95 sm:bg-slate-900/90 backdrop-blur-xl border-b border-white/10 p-4 sm:p-6 lg:p-7 flex items-start justify-between z-20 shadow-md">
               <div className="flex items-center gap-2.5 sm:gap-3">
                 <div className="p-2 sm:p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 shrink-0">
                   <BookOpen className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -1143,7 +1319,7 @@ export function PortfolioStrategyView() {
             </div>
 
             {/* Contenido Estructurado de los Términos */}
-            <div className="space-y-4 sm:space-y-6">
+            <div className="p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6">
               {GLOSSARY_ITEMS.map((item) => {
                 const isHighlighted = glossaryTargetId === item.id
                 return (
